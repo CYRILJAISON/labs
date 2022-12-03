@@ -1,31 +1,41 @@
 import React, { useState } from "react";
-import axios, { Axios } from "axios";
+import { Axios } from "axios";
 
 function Modal() {
-  const url = "https://webhook.site/ed7af77f-b8b7-49e2-a32c-37a42e559658";
+  const url = 'https://webhook.site/ed7af77f-b8b7-49e2-a32c-37a42e559658';
   const [data, setData] = useState({
     nameseg: "",
-    fullname: "",
+    first_name: "",
+    last_name: "",
+    gender: "",
+    age: "",
     accname: "",
+    city: "",
+    state: "",
   });
 
   function handle(e) {
-    const newdata = {...data}
-    newdata[e.target.id] = e.target.value
-    setData(newdata)
-    console.log(newdata)
+    const newdata = { ...data };
+    newdata[e.target.id] = e.target.value;
+    setData(newdata);
+    console.log(newdata);
   }
 
-  function submit(e){
+  const postData = (e) => {
     e.preventDefault();
-    Axios.post(url,{
+    Axios.post('https://webhook.site/ed7af77f-b8b7-49e2-a32c-37a42e559658',
+     {
       name: data.nameseg,
-      fullname: data.fullname,
-      accname: data.accname
-    })
-      .then(res => {
-        console.log(res.data)
-      })
+      first_name: data.first_name,
+      last_name: data.last_name,
+      gender: data.gender,
+      age: data.age,
+      accname: data.accname,
+      city: data.city,
+      state: data.state,
+    }).then((res) => {
+      console.log(res.data).catch(err => console.log(err));
+    });
   }
 
   return (
@@ -62,15 +72,15 @@ function Modal() {
 
             <div class="modal-body bg-light" id="popup">
               <div>
-                <form onSubmit={submit}>
-                <span className="d-flex mb-1">Enter Name of the Segment</span>
-                <input
-                  placeholder="Name of the segment"
-                  type="text"
-                  onChange={(e) => handle(e)}
-                  id="nameseg"
-                  value={data.nameseg}
-                  className="w-100 h-100 mb-2 p-2"
+                <form onSubmit={postData}>
+                  <span className="d-flex ">Enter Name of the Segment</span>
+                  <input
+                    placeholder="Name of the segment"
+                    type="text"
+                    onChange={(e) => handle(e)}
+                    id="nameseg"
+                    value={data.nameseg}
+                    className="w-100 h-100 p-1"
                   />
                 </form>
               </div>
@@ -79,62 +89,99 @@ function Modal() {
                 query
               </span>
               <br />
-              <div className="card p-3 border border-info border-start">
-                <label className="d-flex mb-1">First name</label>
+
+              <div 
+              className="card p-3 border border-info border-start">
+                <label className="d-flex ">First name</label>
+                <input
+                  onChange={(e) => handle(e)}
+                  id="first_name"
+                  value={data.first_name}
+                  className="w-100 p-1"
+                />
+
+                <br />
+                <label className="d-flex ">Last name</label>
+                <input
+                  onChange={(e) => handle(e)}
+                  id="last_name"
+                  value={data.last_name}
+                  className="w-100 p-1"
+                />
+                <br />
+                <label className="d-flex ">Gender</label>
                 <select
                   onChange={(e) => handle(e)}
-                  id="fullname"
-                  value={data.fullname}
-                  className="w-100 p-2"
+                  id="gender"
+                  
+                  value={data.gender}
+                  className="w-100 p-1"
                 >
-                  <option>Cyril Jaison</option>
-                  <option>Jack Daniels</option>
-                  <option>Michale Smith</option>
+                  <option placeholder="Select">Male</option>
+                  <option>Female</option>
+                  <option>Prefer not to say</option>
                 </select>
                 <br />
+                <label className="d-flex ">Age</label>
+                <input
+                  onChange={(e) => handle(e)}
+                  id="age"
+                  value={data.age}
+                  className="w-100 p-1"
+                />
+                <br />
                 <div>
-                  <label className="d-flex mb-1">Account name</label>
-                  <select
+                  <label className="d-flex ">Account name</label>
+                  <input
                     onChange={(e) => handle(e)}
                     id="accname"
                     value={data.accname}
-                    className="d-flex w-100 p-2"
-                  >
-                    <option>Cyril Jaison</option>
-                    <option>Jack Daniels</option>
-                    <option>Michale Smith</option>
-                  </select>
+                    className="d-flex w-100 p-1"
+                  />
                 </div>
+                <br />
+                <div>
+                <label className="d-flex ">City</label>
+                <input
+                  onChange={(e) => handle(e)}
+                  id="city"
+                  value={data.city}
+                  className="d-flex w-100 p-1"
+                />
               </div>
+              <br />
               <div>
-                <select className="d-flex mt-3 w-100 p-2">
-                  <option>Add New Segment</option>
-                  <option>Jack Daniels</option>
-                  <option>Michale Smith</option>
-                </select>
+                <label className="d-flex ">state</label>
+                <input
+                  onChange={(e) => handle(e)}
+                  id="state"
+                  value={data.state}
+                  className="d-flex w-100 p-1"
+                />
               </div>
+            </div>
+              
               <div>
-                <a
-                href="modal"
-                className="d-flex mt-3 text-decoration-none" 
-                > + Add New Segment </a>
+                <a href="modal" 
+                
+                className="d-flex mt-3 text-decoration-none">
+                  + Add New Segment{" "}
+                </a>
               </div>
             </div>
             <div class="modal-footer">
-              <button
-              type="submit" 
+              <button 
+              onClick={postData}
               class="btn btn-primary">
                 Save Segment
               </button>
               <button
-                
                 type="button"
                 class="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
                 Cancel
               </button>
-              
             </div>
           </div>
         </div>
